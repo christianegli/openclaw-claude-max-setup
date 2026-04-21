@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Keep the Mac awake (caffeinate -dimsu) so the agent stack keeps running
+  even when the machine is idle or on battery.
+
+  Only replace {{USER}}. Requires no secrets.
+
+  For stronger battery-sleep prevention (ignores lid close, etc.), also run:
+      sudo pmset -b disablesleep 1 sleep 0 displaysleep 0 disksleep 0
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.{{USER}}.stayawake</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/caffeinate</string>
+        <string>-dimsu</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+    <key>StandardOutPath</key>
+    <string>/tmp/stayawake.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/stayawake.log</string>
+</dict>
+</plist>

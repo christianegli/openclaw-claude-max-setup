@@ -1,0 +1,7 @@
+{
+  "_comment": "Merge into ~/.openclaw/openclaw.json. Stops telegram from fragmenting one reply into many messages (the 'doubles' problem).",
+  "_target": "channels.telegram.streaming",
+  "streaming": {
+    "mode": "off"
+  }
+}

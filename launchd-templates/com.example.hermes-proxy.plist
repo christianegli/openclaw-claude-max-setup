@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  OPTIONAL side-route: OpenAI-format proxy for clients that only speak OpenAI
+  Chat Completions (e.g. Hermes Agent, Continue.dev, Cline).
+
+  This wraps the upstream `claude-max-api-proxy` (npm) so that any OpenAI
+  client can point at http://127.0.0.1:3456/v1 and get Claude responses.
+  Our `claude-shim.py` on PATH extracts <system> tags and bounds tool chains.
+
+  Replace placeholders as in com.example.billing-proxy.plist, plus:
+    {{REPO_PATH}}    absolute path to this repo (for scripts/claude-shim.py)
+
+  Install:
+    npm install -g claude-max-api-proxy
+    mkdir -p ~/.claude-shim
+    ln -sf {{REPO_PATH}}/scripts/claude-shim.py ~/.claude-shim/claude
+    install -m 600 this.plist ~/Library/LaunchAgents/com.{{USER}}.hermes-proxy.plist
+    launchctl load -w ~/Library/LaunchAgents/com.{{USER}}.hermes-proxy.plist
+
+  NOTE: the upstream proxy has a hardcoded 300000ms subprocess timeout in
+  node_modules/claude-max-api-proxy/dist/subprocess/manager.js. For long
+  tool-chains, patch it in-place:
+
+    sed -i '' \
+      's#const DEFAULT_TIMEOUT = 300000;#const DEFAULT_TIMEOUT = parseInt(process.env.CLAUDE_PROXY_TIMEOUT_MS || "1200000", 10);#' \
+      ~/.npm-global/lib/node_modules/claude-max-api-proxy/dist/subprocess/manager.js
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.{{USER}}.hermes-proxy</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{NODE_PATH}}</string>
+        <string>/Users/{{USER}}/.npm-global/lib/node_modules/claude-max-api-proxy/dist/server/standalone.js</string>
+        <string>3456</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/{{USER}}</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/hermes-proxy.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/hermes-proxy.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/{{USER}}</string>
+        <!-- ~/.claude-shim first so our shim shadows the real claude bin -->
+        <key>PATH</key>
+        <string>/Users/{{USER}}/.claude-shim:/Users/{{USER}}/.npm-global/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>CLAUDE_CODE_OAUTH_TOKEN</key>
+        <string>{{OAUTH_TOKEN}}</string>
+        <key>CLAUDE_PROXY_TIMEOUT_MS</key>
+        <string>1200000</string>
+        <key>CLAUDE_SHIM_MAX_TURNS</key>
+        <string>12</string>
+    </dict>
+</dict>
+</plist>

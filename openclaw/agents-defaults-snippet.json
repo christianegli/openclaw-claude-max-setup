@@ -1,0 +1,15 @@
+{
+  "_comment": "Recommended agents.defaults overrides. Merge into ~/.openclaw/openclaw.json.",
+  "_target": "agents.defaults",
+  "model": {
+    "primary": "anthropic/claude-sonnet-4-5"
+  },
+  "llm": {
+    "_comment_idleTimeout": "Native Anthropic streams tokens continuously; 180s is a safe no-output cap",
+    "idleTimeoutSeconds": 180
+  },
+  "thinkingDefault": "off",
+  "_comment_blockStreamingDefault": "optional; set to \"on\" to render per-assistant-block instead of per-chunk. Safer across channels.",
+  "blockStreamingDefault": "on",
+  "blockStreamingBreak": "message_end"
+}

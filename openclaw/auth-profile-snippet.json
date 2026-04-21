@@ -1,0 +1,9 @@
+{
+  "_comment": "Merge this into ~/.openclaw/agents/<agent-id>/agent/auth-profiles.json under profiles. The key is dummy — the billing proxy injects the real OAuth token server-side.",
+  "_target": "profiles.anthropic:default",
+  "anthropic:default": {
+    "type": "api_key",
+    "provider": "anthropic",
+    "key": "proxy-billing-dummy"
+  }
+}

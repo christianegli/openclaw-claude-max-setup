@@ -1,0 +1,17 @@
+# Secrets
+*.env
+.env
+.env.*
+!.env.example
+
+# Per-install artifacts (anything placed into ~/Library/LaunchAgents, etc.)
+*.plist.local
+
+# Editor / OS junk
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+__pycache__/
+*.pyc

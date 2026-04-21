@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  openclaw-billing-proxy (native Anthropic Messages API, subscription-billed)
+
+  Before loading, replace:
+    {{USER}}         your macOS username (path /Users/{{USER}})
+    {{OAUTH_TOKEN}}  Claude Max OAuth token (starts "sk-ant-oat01-")
+                     Get one via:   claude setup-token
+    {{NODE_PATH}}    output of `which node` (e.g. /usr/local/bin/node or /opt/homebrew/bin/node)
+
+  Install:
+    install -m 600 this.plist ~/Library/LaunchAgents/com.{{USER}}.billing-proxy.plist
+    launchctl load -w ~/Library/LaunchAgents/com.{{USER}}.billing-proxy.plist
+
+  Tail log:
+    tail -F /tmp/billing-proxy.log
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.{{USER}}.billing-proxy</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{NODE_PATH}}</string>
+        <string>/Users/{{USER}}/openclaw-billing-proxy/proxy.js</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/{{USER}}/openclaw-billing-proxy</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/billing-proxy.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/billing-proxy.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/{{USER}}</string>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>OAUTH_TOKEN</key>
+        <string>{{OAUTH_TOKEN}}</string>
+        <key>PROXY_PORT</key>
+        <string>18801</string>
+        <key>PROXY_HOST</key>
+        <string>127.0.0.1</string>
+    </dict>
+</dict>
+</plist>
