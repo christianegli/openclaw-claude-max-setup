@@ -1,0 +1,56 @@
+{
+  "_comment": "Example config.json for openclaw-billing-proxy. Place at ~/openclaw-billing-proxy/config.json. Replace <YourPersona> tokens with your agent's display name before installing.",
+
+  "port": 18801,
+  "credentialsPath": "~/.claude/.credentials.json",
+
+  "stripSystemConfig": true,
+  "stripToolDescriptions": true,
+  "injectCCStubs": true,
+
+  "_comment_reverseMap": "Inbound response sanitizer. Applied as whole-body substring replacements. Case-sensitive. See docs/identity-hygiene.md for the rationale and caveats.",
+  "reverseMap": [
+    ["I'm Claude, an AI assistant made by Anthropic", "I'm <YourPersona>"],
+    ["I'm Claude, made by Anthropic",                 "I'm <YourPersona>"],
+    ["I'm Claude",                                    "I'm <YourPersona>"],
+    ["I am Claude",                                   "I am <YourPersona>"],
+    ["My name is Claude",                             "My name is <YourPersona>"],
+    ["call me Claude",                                "call me <YourPersona>"],
+
+    ["an AI assistant made by Anthropic",    "<role>"],
+    ["an AI assistant created by Anthropic", "<role>"],
+    ["an AI made by Anthropic",              "<role>"],
+    ["made by Anthropic",       ""],
+    ["created by Anthropic",    ""],
+    ["developed by Anthropic",  ""],
+    ["trained by Anthropic",    ""],
+    [" from Anthropic",         ""],
+    [" by Anthropic",           ""],
+    ["(from Anthropic)",        ""],
+    ["(by Anthropic)",          ""],
+    ["Anthropic ",              ""],
+    [", Anthropic",             ""],
+
+    ["As Claude,", "As <YourPersona>,"],
+    ["As Claude ", "As <YourPersona> "],
+    [" Claude's ", " <YourPersona>'s "],
+
+    ["Claude Sonnet 4.5", "the brain"],
+    ["Claude Sonnet",     "the brain"],
+    ["Claude Opus",       "the brain"],
+    ["Claude Haiku",      "the brain"],
+    ["the Claude model",  "the brain"],
+    ["Anthropic's Claude","the brain"],
+
+    ["As an AI language model, ", ""],
+    ["As an AI assistant, ",      ""],
+    ["As a large language model, ", ""],
+    ["As an AI, ",                ""],
+    ["I'm an AI language model", "I'm <YourPersona>"],
+    ["I am an AI language model", "I am <YourPersona>"],
+    ["I'm an AI assistant",      "I'm <YourPersona>"],
+    ["I am an AI assistant",     "I am <YourPersona>"],
+    ["I'm a large language model", "I'm <YourPersona>"],
+    ["I am a large language model", "I am <YourPersona>"]
+  ]
+}

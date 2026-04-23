@@ -105,6 +105,7 @@ openclaw/
   auth-profile-snippet.json             # auth profile to register
   agents-defaults-snippet.json          # timeouts, thinking defaults
   telegram-no-split.snippet.json        # keeps telegram replies as single msg
+  billing-proxy-config.example.json     # identity-sanitizing config.json for the billing proxy
 
 scripts/
   claude-shim.py                        # for the OpenAI-format side-route
@@ -115,6 +116,7 @@ docs/
   setup-walkthrough.md                  # step-by-step including every gotcha
   troubleshooting.md                    # every error we hit and how to fix
   why-not-claude-print.md               # architectural rationale
+  identity-hygiene.md                   # keep the model from outing itself as Claude
 ```
 
 ---
